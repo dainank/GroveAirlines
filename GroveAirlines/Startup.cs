@@ -16,7 +16,7 @@ namespace GroveAirlines
             app.UseEndpoints(endpoints => endpoints.MapControllers());  // endpoint pattern for routing web requests (maps all controllers in our service)
         }
 
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)  // registering startup with host
         {
             services.AddControllers();
         }
