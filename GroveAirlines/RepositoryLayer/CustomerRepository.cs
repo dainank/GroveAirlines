@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using GroveAirlines.DatabaseLayer;
@@ -54,6 +55,20 @@ namespace GroveAirlines.RepositoryLayer
         {
             char[] forbiddenCharacters = { '!', '@', '#', '$', '%', '&', '*' };
             return string.IsNullOrEmpty(name) || name.Any(x => forbiddenCharacters.Contains(x));
+        }
+    }
+
+    internal class CustomerEqualityComparer : EqualityComparer<Customer>
+    {
+        public override bool Equals(Customer? x, Customer? y)   // overriding abstract method
+        {
+            throw new NotImplementedException();
+        }
+
+        public override int GetHashCode(Customer obj)
+        {   // class avoids security issue non-pseudo-random number generator
+            int randomNumber = RandomNumberGenerator.GetInt32(int.MaxValue / 2);    // creation of rdm number
+            return (obj.CustomerId + obj.Name.Length + randomNumber).GetHashCode();    // hashing
         }
     }
 }
