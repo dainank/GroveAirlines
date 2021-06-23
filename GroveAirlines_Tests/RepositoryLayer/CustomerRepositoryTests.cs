@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using GroveAirlines.DatabaseLayer;
 using GroveAirlines.DatabaseLayer.Models;
@@ -68,8 +69,13 @@ namespace GroveAirlines_Tests.RepositoryLayer
         [TestMethod]
         public async Task GetCustomerByName_Success()
         {
-            Customer customer = await _repository.GetCustomerByName("Benjamin Whelan");
+            Customer customer =
+                await _repository.GetCustomerByName("Benjamin Whelan"); // get customer from in-memory database
             Assert.IsNotNull(customer);
+
+            Customer dbCustomer = _context.Customer.First();    // grabs first element from in-memory database
+
+            Assert.AreEqual(dbCustomer, customer);  // verify both instances "equal" with overloaded equality operator
         }
 
         [TestMethod]
@@ -85,5 +91,6 @@ namespace GroveAirlines_Tests.RepositoryLayer
         {
             await _repository.GetCustomerByName(name);
         }
+
     }
 }
