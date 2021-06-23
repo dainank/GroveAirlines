@@ -15,9 +15,9 @@ namespace GroveAirlines.RepositoryLayer
     {
         private readonly GroveAirlinesContext _context;
 
-        public CustomerRepository(GroveAirlinesContext _context)
+        public CustomerRepository(GroveAirlinesContext context)
         {
-            this._context = _context;
+            this._context = context;
         }
 
         public CustomerRepository()
@@ -53,7 +53,7 @@ namespace GroveAirlines.RepositoryLayer
 
         private bool IsInvalidCustomerName(string name)
         {
-            char[] forbiddenCharacters = { '!', '@', '#', '$', '%', '&', '*' };
+            char[] forbiddenCharacters = { '!', '@', '#', '$', '%', '&', '*', '=' };    // TODO: Check more characters.
             return string.IsNullOrEmpty(name) || name.Any(x => forbiddenCharacters.Contains(x));
         }
     }
