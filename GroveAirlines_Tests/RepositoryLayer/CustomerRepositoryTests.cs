@@ -33,7 +33,7 @@ namespace GroveAirlines_Tests.RepositoryLayer
         [TestMethod]
         public async Task CreateCustomer_Success()
         {   // Arrange
-            bool result = await _repository.CreateCustomer("Benjamin Whelan"); // Act
+            bool result = await _repository.CreateCustomer("Mike Whelan"); // Act
             Assert.IsTrue(result);  // Assert
 
         }
