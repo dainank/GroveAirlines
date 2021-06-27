@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GroveAirlines.DatabaseLayer;
 using GroveAirlines.DatabaseLayer.Models;
+using GroveAirlines.Exceptions;
 using GroveAirlines.RepositoryLayer;
 using GroveAirlines_Tests.Stubs;
 using Microsoft.EntityFrameworkCore;
@@ -34,9 +35,14 @@ namespace GroveAirlines_Tests.RepositoryLayer
         }
 
         [TestMethod]
-        public void CreateBooking_Success()
+        public async Task CreateBooking_Success()
         {
+            await _repository.CreateBooking(1, 0);
+            Booking booking = _context.Booking.First();
 
+            Assert.IsNotNull(booking);
+            Assert.AreEqual(1, booking.CustomerId);
+            Assert.AreEqual(1, booking.FlightNumber);
         }
 
         [TestMethod]
@@ -50,9 +56,10 @@ namespace GroveAirlines_Tests.RepositoryLayer
         }
 
         [TestMethod]
+        [ExpectedException(typeof(CouldNotAddBookingToDatabaseException))]
         public async Task CreateBooking_Failure_DatabaseError()
         {
-
+            await _repository.CreateBooking(2, 1);
         }
     }
 }
