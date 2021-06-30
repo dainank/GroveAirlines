@@ -39,7 +39,7 @@ namespace GroveAirlines_Tests.RepositoryLayer
         {
             await _repository.CreateBooking(1, 0);
             Booking booking = _context.Booking.First();
-
+            
             Assert.IsNotNull(booking);
             Assert.AreEqual(1, booking.CustomerId);
             Assert.AreEqual(0, booking.FlightNumber);
@@ -49,12 +49,10 @@ namespace GroveAirlines_Tests.RepositoryLayer
         [DataRow(-1, 0)]
         [DataRow(0, -1)]
         [DataRow(-1, -1)]
-        [DataRow(1, -1)]
-        [DataRow(-1, 1)]
         [ExpectedException(typeof(ArgumentException))]
-        public async Task CreateBooking_Failure_InvalidInputs(int customerID, int flightNumber)
+        public async Task CreateBooking_Failure_InvalidInputs(int customerId, int flightNumber)
         {
-            await _repository.CreateBooking(customerID, flightNumber);
+            await _repository.CreateBooking(customerId, flightNumber);
         }
 
         [TestMethod]
