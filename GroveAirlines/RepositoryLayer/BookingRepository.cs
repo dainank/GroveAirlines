@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +20,7 @@ namespace GroveAirlines.RepositoryLayer
 
         public async Task CreateBooking(int customerId, int flightNumber)
         {   // validate
-            if (customerId < 1 || flightNumber < 1) // can't be negative
+            if (customerId < 0 || flightNumber < 0) // can't be negative
             {
                 Console.WriteLine($"Argument Exception in CreateBooking! Customer ID = {customerId}, Flight Number = {flightNumber}");  // for dev
                 throw new ArgumentException("Invalid parameters provided!");

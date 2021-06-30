@@ -39,10 +39,10 @@ namespace GroveAirlines_Tests.RepositoryLayer
         {
             await _repository.CreateBooking(1, 0);
             Booking booking = _context.Booking.First();
-
+            
             Assert.IsNotNull(booking);
             Assert.AreEqual(1, booking.CustomerId);
-            Assert.AreEqual(1, booking.FlightNumber);
+            Assert.AreEqual(0, booking.FlightNumber);
         }
 
         [TestMethod]
@@ -59,7 +59,7 @@ namespace GroveAirlines_Tests.RepositoryLayer
         [ExpectedException(typeof(CouldNotAddBookingToDatabaseException))]
         public async Task CreateBooking_Failure_DatabaseError()
         {
-            await _repository.CreateBooking(2, 1);
+            await _repository.CreateBooking(0, 1);
         }
     }
 }

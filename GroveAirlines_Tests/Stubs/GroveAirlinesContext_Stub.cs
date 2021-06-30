@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using GroveAirlines.DatabaseLayer;
+using GroveAirlines.DatabaseLayer.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace GroveAirlines_Tests.Stubs
 {
@@ -16,11 +18,17 @@ namespace GroveAirlines_Tests.Stubs
 
         }
 
-        public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            return base.Booking.First().CustomerId != 1
-                ? throw new Exception("Database Error")
-                : await base.SaveChangesAsync(cancellationToken);
-        }
+            IEnumerable<EntityEntry> pendingChanges = ChangeTracker.Entries().Where(e => e.State == EntityState.Added);
+            IEnumerable<Booking> bookings = pendingChanges.Select(e => e.Entity).OfType<Booking>();
+            if (bookings.Any(b => b.CustomerId != 1))
+            {
+                throw new Exception("Database Error!");
+            }
+
+            await base.SaveChangesAsync(cancellationToken);
+            return 1;
+        }   
     }
 }
