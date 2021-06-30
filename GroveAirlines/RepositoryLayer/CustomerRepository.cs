@@ -20,11 +20,6 @@ namespace GroveAirlines.RepositoryLayer
             this._context = context;
         }
 
-        public CustomerRepository()
-        {
-
-        }
-
         public async Task<bool> CreateCustomer(string name) // async Task<>
         {
             if (IsInvalidCustomerName(name))

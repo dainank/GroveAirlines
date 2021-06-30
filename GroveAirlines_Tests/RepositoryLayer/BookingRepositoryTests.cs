@@ -20,15 +20,11 @@ namespace GroveAirlines_Tests.RepositoryLayer
         private BookingRepository _repository;
 
         [TestInitialize]
-        public async Task TestInitialize()
+        public void TestInitialize()
         {
             DbContextOptions<GroveAirlinesContext> dbContextOptions =   // in memory temp database
                 new DbContextOptionsBuilder<GroveAirlinesContext>().UseInMemoryDatabase("Grove").Options;
             _context = new GroveAirlinesContext_Stub(dbContextOptions);
-
-            // Booking testBooking = new Booking();
-            // _context.Booking.Add(testBooking);
-            // await _context.SaveChangesAsync();
 
             _repository = new BookingRepository(_context);
             Assert.IsNotNull(_repository);

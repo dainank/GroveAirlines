@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace GroveAirlines.DatabaseLayer.Models
 {
@@ -15,6 +16,12 @@ namespace GroveAirlines.DatabaseLayer.Models
         {
             FlightDestinationNavigation = new HashSet<Flight>();
             FlightOriginNavigation = new HashSet<Flight>();
+        }
+
+        public Airport(string city, string iata)
+        {
+            City = city ?? throw new ArgumentNullException(nameof(city));
+            Iata = iata;
         }
     }
 }
