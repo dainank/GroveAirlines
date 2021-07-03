@@ -23,7 +23,7 @@ namespace GroveAirlines.RepositoryLayer
             if (customerId < 0 || flightNumber < 0) // can't be negative
             {
                 Console.WriteLine($"Argument Exception in CreateBooking! Customer ID = {customerId}, Flight Number = {flightNumber}");  // for dev
-                throw new ArgumentException("Invalid parameters provided!");
+                throw new ArgumentException("Invalid parameters provided; please check parameters.");
             }
             // save
             Booking newBooking = new Booking {CustomerId = customerId, FlightNumber = flightNumber};
