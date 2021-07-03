@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using GroveAirlines.DatabaseLayer;
 using GroveAirlines.DatabaseLayer.Models;
+using GroveAirlines.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace GroveAirlines.RepositoryLayer
 {
@@ -25,7 +28,8 @@ namespace GroveAirlines.RepositoryLayer
                 Console.WriteLine($"Argument exception in GetAirportByID! airportID = {airportID}");    // retrieve airport
                 throw new ArgumentException("Invalid parameters provided; please check parameters.");   // custom exception
             }
-            return new Airport();   // return instance
+            return await _context.Airport.FirstOrDefaultAsync(a => a.AirportId == airportID) ?? throw new AirportNotFoundException();
+            // wait for completion; retrieve first match; return first matching ID element; throw exception if false
         }
     }
 }

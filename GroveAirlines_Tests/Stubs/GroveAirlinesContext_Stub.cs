@@ -15,10 +15,10 @@ namespace GroveAirlines_Tests.Stubs
     {
         public GroveAirlinesContext_Stub(DbContextOptions<GroveAirlinesContext> options) : base(options)
         {
-
+            base.Database.EnsureDeleted();  // IMPORTANT
         }
 
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) // Look Into
         {
             IEnumerable<EntityEntry> pendingChanges = ChangeTracker.Entries().Where(e => e.State == EntityState.Added);
             IEnumerable<Booking> bookings = pendingChanges.Select(e => e.Entity).OfType<Booking>();
@@ -27,8 +27,14 @@ namespace GroveAirlines_Tests.Stubs
                 throw new Exception("Database Error!");
             }
 
+            IEnumerable<Airport> airports = pendingChanges.Select(e => e.Entity).OfType<Airport>();
+            if (airports.Any(a => a.AirportId == 10))
+            {
+                throw new Exception("Database Error!");
+            }
+
             await base.SaveChangesAsync(cancellationToken);
             return 1;
-        }   
+        }
+        }
     }
-}
