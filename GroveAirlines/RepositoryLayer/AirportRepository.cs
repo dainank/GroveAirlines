@@ -22,10 +22,10 @@ namespace GroveAirlines.RepositoryLayer
             // validate
             if (airportID < 1)
             {
-                Console.WriteLine($"Argument exception in GetAirportByID! airportID = {airportID}");
-                throw new ArgumentException("Invalid parameters provided; please check parameters.");
+                Console.WriteLine($"Argument exception in GetAirportByID! airportID = {airportID}");    // retrieve airport
+                throw new ArgumentException("Invalid parameters provided; please check parameters.");   // custom exception
             }
-            return new Airport();
+            return new Airport();   // return instance
         }
     }
 }

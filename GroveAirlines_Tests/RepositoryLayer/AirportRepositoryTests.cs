@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,13 +36,26 @@ namespace GroveAirlines_Tests.RepositoryLayer
             Assert.IsNotNull(airport);
         }
 
-        [DataRow(0)]
-        [DataRow(-1)]
-        [ExpectedException(typeof(ArgumentException))]
         [TestMethod]
-        public async Task GetAirportByID_Failure_InvalidInput(int airportID)
+        [ExpectedException(typeof(ArgumentException))]
+        public async Task GetAirportByID_Failure_InvalidInput()
         {
-            await _repository.GetAirportByID(airportID);
+            StringWriter outputStream = new StringWriter();
+            try
+            {
+                Console.SetOut(outputStream);
+                await _repository.GetAirportByID(-1);
+            }
+            catch (ArgumentException)
+            {
+                Assert.IsTrue(outputStream.ToString().Contains($"Argument exception in GetAirportByID! airportID = -1"));
+                throw new ArgumentException();
+            }
+            finally
+            {
+                outputStream.Dispose();
+            }
         }
+
     }
 }
