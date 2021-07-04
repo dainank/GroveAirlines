@@ -43,8 +43,8 @@ namespace GroveAirlines_Tests.RepositoryLayer
                     new Airport
                     {
                         AirportId = 2,
-                        City = "Phoenix",
-                        Iata = "PHX"
+                        City = "Luxembourg",
+                        Iata = "LUX"
                     }
                 },
                 {
@@ -52,8 +52,8 @@ namespace GroveAirlines_Tests.RepositoryLayer
                     new Airport
                     {
                         AirportId = 3,
-                        City = "Bennington",
-                        Iata = "DDH"
+                        City = "Manchester",
+                        Iata = "MAN"
                     }
                 },
                 {
@@ -61,8 +61,8 @@ namespace GroveAirlines_Tests.RepositoryLayer
                     new Airport
                     {
                         AirportId = 4,
-                        City = "Raleigh-Durham",
-                        Iata = "RDU"
+                        City = "Strasbourg",
+                        Iata = "SXB"
                     }
                 }
             };
@@ -107,7 +107,7 @@ namespace GroveAirlines_Tests.RepositoryLayer
             }
             finally
             {
-                outputStream.Dispose();
+                outputStream.Dispose(); // TODO: Async Overload?
             }
         }
 
