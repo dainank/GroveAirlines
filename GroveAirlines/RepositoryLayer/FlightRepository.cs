@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GroveAirlines.DatabaseLayer;
 using GroveAirlines.DatabaseLayer.Models;
 using GroveAirlines.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace GroveAirlines.RepositoryLayer
 {
@@ -35,7 +36,8 @@ namespace GroveAirlines.RepositoryLayer
                 throw new FlightNotFoundException();
             }
 
-            return new Flight();
+            return await _context.Flight.FirstOrDefaultAsync(f => f.FlightNumber == flightNumber) ??
+                   throw new FlightNotFoundException();
         }
     }
 }

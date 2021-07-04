@@ -20,14 +20,39 @@ namespace GroveAirlines_Tests.RepositoryLayer
         private FlightRepository _repository;
 
         [TestInitialize]
-        public void TestInitialize()
+        public async Task TestInitialize()
         {
             DbContextOptions<GroveAirlinesContext> dbContextOptions = 
                 new DbContextOptionsBuilder<GroveAirlinesContext>().UseInMemoryDatabase("Grove").Options;
             _context = new GroveAirlinesContext_Stub(dbContextOptions);
 
+            Flight flight = new Flight  // object creation
+            {
+                FlightNumber = 1,
+                Origin = 1,
+                Destination = 2
+            };
+
+            _context.Flight.Add(flight);
+            await _context.SaveChangesAsync();
+
             _repository = new FlightRepository(_context);
             Assert.IsNotNull(_repository);
+        }
+
+        [TestMethod]
+        public async Task GetFlightByFlightNumber_Success()
+        {
+            Flight flight = await _repository.GetFlightByFlightNumber(1, 1, 2);
+            Assert.IsNotNull(flight);
+
+            Flight dbFlight = _context.Flight.First(f => f.FlightNumber == 1);
+
+            Assert.IsNotNull(dbFlight);
+
+            Assert.AreEqual(dbFlight.FlightNumber, flight.FlightNumber);
+            Assert.AreEqual(dbFlight.Origin, flight.Origin);
+            Assert.AreEqual(dbFlight.Destination, flight.Destination);
         }
 
         [TestMethod]
@@ -50,6 +75,13 @@ namespace GroveAirlines_Tests.RepositoryLayer
         public async Task GetFlightByFlightNumber_Failure_InvalidFlightNumber(int flightNumber)
         {
             await _repository.GetFlightByFlightNumber(flightNumber, 0, 0);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FlightNotFoundException))]
+        public async Task GetFlightByFlightNumber_Failure_DatabaseException()
+        {
+            await _repository.GetFlightByFlightNumber(2, 1, 2);
         }
     }
 }
