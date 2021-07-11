@@ -23,7 +23,7 @@ namespace GroveAirlines.RepositoryLayer
         public async Task<Airport> GetAirportByID(int airportID)
         {
             // validate
-            if (airportID < 1)
+            if (!airportID.IsPositiveInteger())
             {
                 Console.WriteLine($"Argument exception in GetAirportByID! airportID = {airportID}");    // retrieve airport
                 throw new ArgumentException("Invalid parameters provided; please check parameters.");   // custom exception

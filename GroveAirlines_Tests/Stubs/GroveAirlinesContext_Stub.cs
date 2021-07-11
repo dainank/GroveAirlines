@@ -33,6 +33,12 @@ namespace GroveAirlines_Tests.Stubs
                 throw new Exception("Database Error!");
             }
 
+            IEnumerable<Customer> customers = pendingChanges.Select(e => e.Entity).OfType<Customer>();
+            if (customers.Any(a => a.CustomerId == 10))
+            {
+                throw new Exception("Database Error!");
+            }
+
             await base.SaveChangesAsync(cancellationToken);
             return 1;
         }

@@ -4,6 +4,7 @@ using GroveAirlines.DatabaseLayer;
 using GroveAirlines.DatabaseLayer.Models;
 using GroveAirlines.Exceptions;
 using GroveAirlines.RepositoryLayer;
+using GroveAirlines_Tests.Stubs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -20,7 +21,7 @@ namespace GroveAirlines_Tests.RepositoryLayer
         {
             DbContextOptions<GroveAirlinesContext> dbContextOptions =   // in memory temp database
                 new DbContextOptionsBuilder<GroveAirlinesContext>().UseInMemoryDatabase("Grove").Options;
-            _context = new GroveAirlinesContext(dbContextOptions);
+            _context = new GroveAirlinesContext_Stub(dbContextOptions);
 
             Customer testCustomer = new Customer("Benjamin Whelan");
             _context.Customer.Add(testCustomer);
@@ -33,8 +34,16 @@ namespace GroveAirlines_Tests.RepositoryLayer
         [TestMethod]
         public async Task CreateCustomer_Success()
         {   // Arrange
-            bool result = await _repository.CreateCustomer("Mike Whelan"); // Act
-            Assert.IsTrue(result);  // Assert
+            Customer tempCustomer = new Customer("Mike Whelan");
+            _context.Customer.Add(tempCustomer);
+            await _context.SaveChangesAsync();
+
+            _repository = new CustomerRepository(_context);
+            Assert.IsNotNull(_repository);
+
+            //bool result = await _repository.CreateCustomer("Mike Whelan"); // Act
+            //Assert.IsTrue(result);  // Assert
+            //_context.Customer.Remove("Mike Whelan");
 
         }
 
