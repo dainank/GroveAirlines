@@ -14,9 +14,9 @@ namespace GroveAirlines.RepositoryLayer
     {
         private readonly GroveAirlinesContext _context;
 
-        public FlightRepository(GroveAirlinesContext context)
+        public FlightRepository(GroveAirlinesContext _context)
         {
-            this._context = context;
+            this._context = _context;
         }
 
 

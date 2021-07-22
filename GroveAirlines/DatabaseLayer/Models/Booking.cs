@@ -1,6 +1,6 @@
 ﻿namespace GroveAirlines.DatabaseLayer.Models
 {
-    public partial class Booking
+    public sealed class Booking
     {
         public int BookingId { get; set; }
         public int FlightNumber { get; set; }
