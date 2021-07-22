@@ -15,9 +15,9 @@ namespace GroveAirlines.RepositoryLayer
     {
         private readonly GroveAirlinesContext _context;
 
-        public AirportRepository(GroveAirlinesContext context)
+        public AirportRepository(GroveAirlinesContext _context)
         {
-            this._context = context;
+            this._context = _context;
         }
 
         public async Task<Airport> GetAirportByID(int airportID)

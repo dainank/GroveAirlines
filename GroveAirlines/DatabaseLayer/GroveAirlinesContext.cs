@@ -6,10 +6,6 @@ namespace GroveAirlines.DatabaseLayer
 {
     public class GroveAirlinesContext : DbContext
     {
-        public GroveAirlinesContext()   // default constructor
-        {
-        }
-
         public GroveAirlinesContext(DbContextOptions<GroveAirlinesContext> options) // passing instance type
             : base(options)
         {

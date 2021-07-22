@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GroveAirlines.Exceptions
 {
-    public class CustomerNotFoundException : Exception  // TODO: Make private without tests failing!
+    public class CustomerNotFoundException : Exception
     {
     }
 }

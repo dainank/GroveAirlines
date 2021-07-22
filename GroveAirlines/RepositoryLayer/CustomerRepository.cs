@@ -15,9 +15,9 @@ namespace GroveAirlines.RepositoryLayer
     {
         private readonly GroveAirlinesContext _context;
 
-        public CustomerRepository(GroveAirlinesContext context)
+        public CustomerRepository(GroveAirlinesContext _context)
         {
-            this._context = context;
+            this._context = _context;
         }
 
         public async Task<bool> CreateCustomer(string name) // async Task<>
@@ -27,10 +27,19 @@ namespace GroveAirlines.RepositoryLayer
                 return false;
             }
 
-            Customer newCustomer = new Customer(name);
-            await using GroveAirlinesContext context = new GroveAirlinesContext();
-            context.Customer.Add(newCustomer);
-            await context.SaveChangesAsync();
+            try
+            {
+                Customer newCustomer = new Customer(name);
+                using (_context)
+                {
+                    _context.Customer.Add(newCustomer);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch
+            {
+                return false;
+            }
 
             return true;
         }
@@ -53,17 +62,17 @@ namespace GroveAirlines.RepositoryLayer
         }
     }
 
-    internal class CustomerEqualityComparer : EqualityComparer<Customer>
-    {
-        public override bool Equals(Customer? x, Customer? y)   // overriding abstract method
-        {
-            throw new NotImplementedException();
-        }
+    //internal class CustomerEqualityComparer : EqualityComparer<Customer>
+    //{
+    //    public override bool Equals(Customer? x, Customer? y)   // overriding abstract method
+    //    {
+    //        throw new NotImplementedException();
+    //    }
 
-        public override int GetHashCode(Customer obj)
-        {   // class avoids security issue non-pseudo-random number generator
-            int randomNumber = RandomNumberGenerator.GetInt32(int.MaxValue / 2);    // creation of rdm number
-            return (obj.CustomerId + obj.Name.Length + randomNumber).GetHashCode();    // hashing
-        }
-    }
+    //    public override int GetHashCode(Customer obj)
+    //    {   // class avoids security issue non-pseudo-random number generator
+    //        int randomNumber = RandomNumberGenerator.GetInt32(int.MaxValue / 2);    // creation of rdm number
+    //        return (obj.CustomerId + obj.Name.Length + randomNumber).GetHashCode();    // hashing
+    //    }
+    //}
 }

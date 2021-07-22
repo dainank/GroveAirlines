@@ -50,15 +50,15 @@ namespace GroveAirlines_Tests.RepositoryLayer
         [TestMethod]
         public async Task CreateCustomer_Failure_NameIsNull()
         {
-            bool resultEmpty = await _repository.CreateCustomer(string.Empty); // ""
-            Assert.IsFalse(resultEmpty);
+            bool resultNull = await _repository.CreateCustomer(null); // ""
+            Assert.IsFalse(resultNull);
         }
 
         [TestMethod]
         public async Task CreateCustomer_Failure_NameIsEmptyString()
         {
-            bool resultNull = await _repository.CreateCustomer(null);
-            Assert.IsFalse(resultNull);
+            bool resultEmpty = await _repository.CreateCustomer(string.Empty);
+            Assert.IsFalse(resultEmpty);
         }
 
         [TestMethod]
