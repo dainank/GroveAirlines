@@ -33,18 +33,9 @@ namespace GroveAirlines_Tests.RepositoryLayer
 
         [TestMethod]
         public async Task CreateCustomer_Success()
-        {   // Arrange
-            Customer tempCustomer = new Customer("Mike Whelan");
-            _context.Customer.Add(tempCustomer);
-            await _context.SaveChangesAsync();
-
-            _repository = new CustomerRepository(_context);
-            Assert.IsNotNull(_repository);
-
-            //bool result = await _repository.CreateCustomer("Mike Whelan"); // Act
-            //Assert.IsTrue(result);  // Assert
-            //_context.Customer.Remove("Mike Whelan");
-
+        {   
+            bool result = await _repository.CreateCustomer("Benjamin Whelan");
+            Assert.IsTrue(result);
         }
 
         [TestMethod]
@@ -76,15 +67,22 @@ namespace GroveAirlines_Tests.RepositoryLayer
         }
 
         [TestMethod]
+        public async Task CreateCustomer_Failure_DatabaseAccessError()
+        {
+            CustomerRepository repository = new CustomerRepository(null);
+            Assert.IsNotNull(repository);
+
+            bool result = await repository.CreateCustomer("Donald Knuth");
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
         public async Task GetCustomerByName_Success()
         {
-            Customer customer =
-                await _repository.GetCustomerByName("Benjamin Whelan"); // get customer from in-memory database
+            Customer customer = await _repository.GetCustomerByName("Benjamin Whelan");
             Assert.IsNotNull(customer);
 
-            Customer dbCustomer = _context.Customer.First();    // grabs first element from in-memory database
-
-            Assert.AreEqual(dbCustomer, customer);  // verify both instances "equal" with overloaded equality operator
+            Assert.AreEqual("Benjamin Whelan", customer.Name);
         }
 
         [TestMethod]
