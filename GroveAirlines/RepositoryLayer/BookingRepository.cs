@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using GroveAirlines.DatabaseLayer;
 using GroveAirlines.DatabaseLayer.Models;
@@ -9,6 +11,14 @@ namespace GroveAirlines.RepositoryLayer
     public class BookingRepository
     {
         private readonly GroveAirlinesContext _context; // DB Tools
+
+        [MethodImpl(MethodImplOptions.NoInlining)]  // TODO: Look into
+        public BookingRepository()
+        {
+            if (Assembly.GetExecutingAssembly().FullName == Assembly.GetCallingAssembly().FullName) {
+                throw new Exception("This constructor should only be used for testing");
+            }
+        }
 
         public BookingRepository(GroveAirlinesContext _context)  // Constructor Call
         {
