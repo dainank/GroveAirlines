@@ -10,6 +10,8 @@ namespace GroveAirlines.RepositoryLayer
     {
         private readonly GroveAirlinesContext _context; // DB Tools
 
+        public BookingRepository() { }
+
         public BookingRepository(GroveAirlinesContext _context)  // Constructor Call
         {
             this._context = _context;
