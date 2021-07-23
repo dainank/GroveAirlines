@@ -1,4 +1,5 @@
 ﻿using GroveAirlines.DatabaseLayer;
+using GroveAirlines.DatabaseLayer.Models;
 using GroveAirlines.RepositoryLayer;
 using GroveAirlines.ServiceLayer;
 using GroveAirlines_Tests.Stubs;
@@ -28,12 +29,18 @@ namespace GroveAirlines_Tests.ServiceLayer
         [TestMethod]
         public async Task CreateBooking_Success()
         {
-            Mock<BookingRepository> mockRepository = new Mock<BookingRepository>();
-            mockRepository.Setup(repository =>
-            repository.CreateBooking(0, 0)).Returns(Task.CompletedTask);
+            Mock<BookingRepository> mockBookingRepository = new Mock<BookingRepository>();  // mock repository
+            Mock<CustomerRepository> mockCustomerRepository = new Mock<CustomerRepository>();
 
-            BookingService service = new BookingService(mockRepository);    // inject repo
-            (bool result, Exception exception) = await service.CreateBooking("Benjamin Whelan", 0);
+            mockBookingRepository.Setup(repository => repository.CreateBooking(0, 0)).Returns(Task.CompletedTask);  // setup return
+            mockCustomerRepository.Setup(repository => repository.GetCustomerByName("Benjamin Whelan")).Returns(Task.FromResult(new Customer("Benjamin Whelan")));
+
+            BookingService service = new BookingService(mockBookingRepository.Object, mockCustomerRepository.Object);  // inject mock into service
+            
+            (bool result, Exception exception) = await service.CreateBooking("Benjamin Whelan", 0); // create booking
+
+            Assert.IsTrue(result);
+            Assert.IsNull(exception);
         }
     }
 }
