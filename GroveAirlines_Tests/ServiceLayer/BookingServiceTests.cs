@@ -16,16 +16,6 @@ namespace GroveAirlines_Tests.ServiceLayer
 {
     public class BookingServiceTests
     {
-        private GroveAirlinesContext _context;
-
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            DbContextOptions<GroveAirlinesContext> dbContextOptions =   // in memory temp database
-               new DbContextOptionsBuilder<GroveAirlinesContext>().UseInMemoryDatabase("Grove").Options;
-            _context = new GroveAirlinesContext_Stub(dbContextOptions);
-        }
-
         [TestMethod]
         public async Task CreateBooking_Success()
         {
