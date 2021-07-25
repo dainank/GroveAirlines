@@ -12,7 +12,6 @@ namespace GroveAirlines.ServiceLayer
 {
     public class BookingService
     {
-
         private readonly BookingRepository _bookingRepository;
         private readonly FlightRepository _flightRepository;
         private readonly CustomerRepository _customerRepository;

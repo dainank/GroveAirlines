@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,7 +22,16 @@ namespace GroveAirlines.RepositoryLayer
             this._context = context;
         }
 
-        public async Task<Airport> GetAirportById(int airportId)
+        [MethodImpl(MethodImplOptions.NoInlining)] // parameter less constructor only for testing
+        public AirportRepository()
+        {
+            if (Assembly.GetExecutingAssembly().FullName == Assembly.GetCallingAssembly().FullName)
+            {
+                throw new Exception("This constructor should only be used for testing");
+            }
+        }
+
+        public virtual async Task<Airport> GetAirportById(int airportId)
         {
             // validate
             if (airportId.IsPositiveInteger())
