@@ -36,9 +36,9 @@ namespace GroveAirlines_Tests.ServiceLayer
             _mockBookingRepository.Setup(repository => repository.CreateBooking(0, 0)).Returns(Task.CompletedTask);  // setup return
             _mockCustomerRepository.Setup(repository => repository.GetCustomerByName("Benjamin Whelan")).Returns(Task.FromResult(new Customer("Benjamin Whelan")));
 
-            BookingService service = new BookingService(_mockBookingRepository.Object, _mockCustomerRepository.Object);  // inject mock into service
+            var service = new BookingService(_mockBookingRepository.Object, _mockCustomerRepository.Object);  // inject mock into service
             
-            (bool result, Exception exception) = await service.CreateBooking("Benjamin Whelan", 0); // create booking
+            var (result, exception) = await service.CreateBooking("Benjamin Whelan", 0); // create booking
 
             Assert.IsTrue(result);
             Assert.IsNull(exception);
@@ -49,7 +49,7 @@ namespace GroveAirlines_Tests.ServiceLayer
         [DataRow("", 0)]
         [DataRow(null, -1)]
         [DataRow("Benjamin Whelan", -1)]
-        public async Task CreateBooking_Failure_InvalidInputParamters(string customerName, int flightNumber)
+        public async Task CreateBooking_Failure_InvalidInputParameters(string customerName, int flightNumber)
         {
             _mockBookingRepository.Setup(repository => repository.CreateBooking(0, 1)).Throws(new ArgumentException());  // logic paths
             _mockBookingRepository.Setup(repository => repository.CreateBooking(1, 2)).Throws(new CouldNotAddBookingToDatabaseException());
@@ -57,9 +57,9 @@ namespace GroveAirlines_Tests.ServiceLayer
             _mockCustomerRepository.Setup(repository => repository.GetCustomerByName("Benjamin Whelan")).Returns(Task.FromResult(new Customer("Benjamin Whelan") { CustomerId = 0 }));
             _mockCustomerRepository.Setup(repository => repository.GetCustomerByName("Scott Whelan")).Returns(Task.FromResult(new Customer("Scott Whelan"){CustomerId = 1}));
 
-            BookingService service = new BookingService(_mockBookingRepository.Object, _mockCustomerRepository.Object);
+            var service = new BookingService(_mockBookingRepository.Object, _mockCustomerRepository.Object);
 
-            (bool result, Exception exception) = await service.CreateBooking("Benjamin Whelan", 1); // call false
+            var (result, exception) = await service.CreateBooking("Benjamin Whelan", 1); // call false
 
             Assert.IsFalse(result);
             Assert.IsNotNull(exception);
@@ -82,8 +82,8 @@ namespace GroveAirlines_Tests.ServiceLayer
             GetCustomerByName("Benjamin Whelan")).Returns(Task.FromResult(new Customer("Benjamin Whelan") { CustomerId = 0 }));
                 // above mocks creating repository layer content
 
-            BookingService service = new BookingService(_mockBookingRepository.Object, _mockFlightRepository.Object, _mockCustomerRepository.Object);
-            (bool result, Exception exception) = await service.CreateBooking("Benjamin Whelan", 1);
+            var service = new BookingService(_mockBookingRepository.Object, _mockFlightRepository.Object, _mockCustomerRepository.Object);
+            var (result, exception) = await service.CreateBooking("Benjamin Whelan", 1);
 
             Assert.IsFalse(result);
             Assert.IsNotNull(exception);
@@ -93,12 +93,12 @@ namespace GroveAirlines_Tests.ServiceLayer
         [TestMethod]
         public async Task CreateBooking_Failure_FlightNotInDatabase()
         {
-            BookingService bookingService = new BookingService(_mockBookingRepository.Object, _mockFlightRepository.Object, _mockCustomerRepository.Object);
-            (bool result, Exception exception) = await bookingService.CreateBooking("Benjamin Whelan", 12);
+            var bookingService = new BookingService(_mockBookingRepository.Object, _mockFlightRepository.Object, _mockCustomerRepository.Object);
+            var (result, exception) = await bookingService.CreateBooking("Benjamin Whelan", 12);
 
             Assert.IsFalse(result);
             Assert.IsNotNull(exception);
-            Assert.IsInstanceOfType(exception, typeof(CouldNotAddBookingToDatabaseException));
+            Assert.IsInstanceOfType(exception, typeof(NullReferenceException));
         }
     }
 }
