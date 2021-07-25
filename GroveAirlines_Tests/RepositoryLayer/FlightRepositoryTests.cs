@@ -33,7 +33,15 @@ namespace GroveAirlines_Tests.RepositoryLayer
                 Destination = 2
             };
 
+            Flight flight2 = new Flight()
+            {
+                FlightNumber = 2,
+                Origin = 3,
+                Destination = 4
+            };
+
             _context.Flight.Add(flight);
+            _context.Flight.Add(flight2);
             await _context.SaveChangesAsync();
 
             _repository = new FlightRepository(_context);
@@ -81,7 +89,7 @@ namespace GroveAirlines_Tests.RepositoryLayer
         [ExpectedException(typeof(FlightNotFoundException))]
         public async Task GetFlightByFlightNumber_Failure_DatabaseException()
         {
-            await _repository.GetFlightByFlightNumber(2);
+            await _repository.GetFlightByFlightNumber(3);
         }
     }
 }

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using GroveAirlines.DatabaseLayer;
 using GroveAirlines.DatabaseLayer.Models;
 using GroveAirlines.Exceptions;
+using GroveAirlines.Views;
 using Microsoft.EntityFrameworkCore;
 
 namespace GroveAirlines.RepositoryLayer
@@ -21,7 +22,7 @@ namespace GroveAirlines.RepositoryLayer
             this._context = context;
         }
 
-        [MethodImpl(MethodImplOptions.NoInlining)]  // parameter less constructor only for testing
+        [MethodImpl(MethodImplOptions.NoInlining)] // parameter less constructor only for testing
         public FlightRepository()
         {
             if (Assembly.GetExecutingAssembly().FullName == Assembly.GetCallingAssembly().FullName)
@@ -39,6 +40,17 @@ namespace GroveAirlines.RepositoryLayer
                 $"Argument exception in GetFlightByFlightNumber! flightNumber = {flightNumber}");
             throw new FlightNotFoundException();
 
+        }
+
+        public virtual Queue<Flight> GetAllFlights()
+        {
+            Queue<Flight> flights = new Queue<Flight>(_context.Flight.Count());
+            foreach (Flight flight in _context.Flight)
+            {
+                flights.Enqueue(flight);
+            }
+
+            return flights;
         }
     }
 }
