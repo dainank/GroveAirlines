@@ -4,14 +4,14 @@ using System;
 
 namespace GroveAirlines
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            InitalizeHost();
+            InitializeHost();
         }
 
-        private static void InitalizeHost() =>
+        private static void InitializeHost() =>
           Host.CreateDefaultBuilder()   // HOST BUILDER (with defaults)
             .ConfigureWebHostDefaults(builder =>
             {

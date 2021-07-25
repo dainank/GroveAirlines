@@ -17,12 +17,12 @@ namespace GroveAirlines.RepositoryLayer
     {
         private readonly GroveAirlinesContext _context;
 
-        public CustomerRepository(GroveAirlinesContext _context)
+        public CustomerRepository(GroveAirlinesContext context)
         {
-            this._context = _context;
+            this._context = context;
         }
 
-        [MethodImpl(MethodImplOptions.NoInlining)]  // parameterless constructor only for testing
+        [MethodImpl(MethodImplOptions.NoInlining)]  // parameter less constructor only for testing
         public CustomerRepository()
         {
             if (Assembly.GetExecutingAssembly().FullName == Assembly.GetCallingAssembly().FullName)
@@ -40,8 +40,8 @@ namespace GroveAirlines.RepositoryLayer
 
             try
             {
-                Customer newCustomer = new Customer(name);
-                using (_context)
+                var newCustomer = new Customer(name);
+                await using (_context)
                 {
                     _context.Customer.Add(newCustomer);
                     await _context.SaveChangesAsync();
@@ -66,24 +66,10 @@ namespace GroveAirlines.RepositoryLayer
                    ?? throw new CustomerNotFoundException();    // if NULL respond with this
         }
 
-        private bool IsInvalidCustomerName(string name)
+        private static bool IsInvalidCustomerName(string name)
         {
             char[] forbiddenCharacters = { '!', '@', '#', '$', '%', '&', '*', '=' };    // TODO: Check more characters.
             return string.IsNullOrEmpty(name) || name.Any(x => forbiddenCharacters.Contains(x));
         }
     }
-
-    //internal class CustomerEqualityComparer : EqualityComparer<Customer>
-    //{
-    //    public override bool Equals(Customer? x, Customer? y)   // overriding abstract method
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-
-    //    public override int GetHashCode(Customer obj)
-    //    {   // class avoids security issue non-pseudo-random number generator
-    //        int randomNumber = RandomNumberGenerator.GetInt32(int.MaxValue / 2);    // creation of rdm number
-    //        return (obj.CustomerId + obj.Name.Length + randomNumber).GetHashCode();    // hashing
-    //    }
-    //}
 }

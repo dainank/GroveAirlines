@@ -13,14 +13,12 @@ namespace GroveAirlines.ServiceLayer
     {
 
         private readonly BookingRepository _bookingRepository;
+        private readonly FlightRepository _flightRepository;
         private readonly CustomerRepository _customerRepository;
-        private BookingRepository repository;
-        private FlightRepository object1;
-        private CustomerRepository object2;
 
         public BookingService(BookingRepository repository)
         {
-            this.repository = repository;
+            _bookingRepository = repository;
         }
 
         public BookingService(BookingRepository bookingRepository, CustomerRepository customerRepository)
@@ -29,10 +27,11 @@ namespace GroveAirlines.ServiceLayer
             _customerRepository = customerRepository;
         }
 
-        public BookingService(BookingRepository repository, FlightRepository object1, CustomerRepository object2) : this(repository)
+        public BookingService(BookingRepository bookingRepository, FlightRepository flightRepository, CustomerRepository customerRepository)
         {
-            this.object1 = object1;
-            this.object2 = object2;
+            _bookingRepository = bookingRepository;
+            _flightRepository = flightRepository;
+            _customerRepository = customerRepository;
         }
 
         public async Task<(bool, Exception)> CreateBooking(string customerName, int flightNumber)

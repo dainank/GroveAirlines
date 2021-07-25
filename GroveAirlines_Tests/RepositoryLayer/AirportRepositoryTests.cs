@@ -81,7 +81,7 @@ namespace GroveAirlines_Tests.RepositoryLayer
         [DataRow(4)]
         public async Task GetAirportByID_Success(int airportId)
         {
-            Airport airport = await _repository.GetAirportByID(airportId);
+            Airport airport = await _repository.GetAirportById(airportId);
             Assert.IsNotNull(airport);
 
             Airport dbAirport = _context.Airport.First(a => a.AirportId == airportId);
@@ -98,7 +98,7 @@ namespace GroveAirlines_Tests.RepositoryLayer
             try
             {
                 Console.SetOut(outputStream);
-                await _repository.GetAirportByID(-1);
+                await _repository.GetAirportById(-1);
             }
             catch (ArgumentException)
             {
@@ -115,7 +115,7 @@ namespace GroveAirlines_Tests.RepositoryLayer
         [ExpectedException(typeof(AirportNotFoundException))]
         public async Task GetAirportByID_Failure_DatabaseException()
         {
-            await _repository.GetAirportByID(10);
+            await _repository.GetAirportById(10);
         }
 
     }

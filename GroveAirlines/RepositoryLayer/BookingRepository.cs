@@ -20,9 +20,9 @@ namespace GroveAirlines.RepositoryLayer
             }
         }
 
-        public BookingRepository(GroveAirlinesContext _context)  // Constructor Call
+        public BookingRepository(GroveAirlinesContext context)  // Constructor Call
         {
-            this._context = _context;
+            this._context = context;
         }
 
         public virtual async Task CreateBooking(int customerId, int flightNumber)
@@ -33,7 +33,7 @@ namespace GroveAirlines.RepositoryLayer
                 throw new ArgumentException("Invalid parameters provided; please check parameters.");
             }
             // save
-            Booking newBooking = new Booking 
+            var newBooking = new Booking 
             {
                 CustomerId = customerId, 
                 FlightNumber = flightNumber

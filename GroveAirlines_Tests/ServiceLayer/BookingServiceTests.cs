@@ -87,7 +87,18 @@ namespace GroveAirlines_Tests.ServiceLayer
 
             Assert.IsFalse(result);
             Assert.IsNotNull(exception);
-            Assert.IsInstanceOfType(exception, typeof(NullReferenceException));
+            Assert.IsInstanceOfType(exception, typeof(ArgumentException));
+        }
+
+        [TestMethod]
+        public async Task CreateBooking_Failure_FlightNotInDatabase()
+        {
+            BookingService bookingService = new BookingService(_mockBookingRepository.Object, _mockFlightRepository.Object, _mockCustomerRepository.Object);
+            (bool result, Exception exception) = await bookingService.CreateBooking("Benjamin Whelan", 12);
+
+            Assert.IsFalse(result);
+            Assert.IsNotNull(exception);
+            Assert.IsInstanceOfType(exception, typeof(CouldNotAddBookingToDatabaseException));
         }
     }
 }

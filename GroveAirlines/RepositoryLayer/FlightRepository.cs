@@ -16,12 +16,12 @@ namespace GroveAirlines.RepositoryLayer
     {
         private readonly GroveAirlinesContext _context;
 
-        public FlightRepository(GroveAirlinesContext _context)
+        public FlightRepository(GroveAirlinesContext context)
         {
-            this._context = _context;
+            this._context = context;
         }
 
-        [MethodImpl(MethodImplOptions.NoInlining)]  // parameterless constructor only for testing
+        [MethodImpl(MethodImplOptions.NoInlining)]  // parameter less constructor only for testing
         public FlightRepository()
         {
             if (Assembly.GetExecutingAssembly().FullName == Assembly.GetCallingAssembly().FullName)
@@ -39,15 +39,13 @@ namespace GroveAirlines.RepositoryLayer
                 throw new ArgumentException("Invalid parameters provided.");
             }
 
-            if (!flightNumber.IsPositiveInteger())
-            {
-                Console.WriteLine(
-                    $"Argument exception in GetFlightByFlightNumber! flightNumber = {flightNumber}");
-                throw new FlightNotFoundException();
-            }
+            if (flightNumber.IsPositiveInteger())
+                return await _context.Flight.FirstOrDefaultAsync(f => f.FlightNumber == flightNumber) ??
+                       throw new FlightNotFoundException();
+            Console.WriteLine(
+                $"Argument exception in GetFlightByFlightNumber! flightNumber = {flightNumber}");
+            throw new FlightNotFoundException();
 
-            return await _context.Flight.FirstOrDefaultAsync(f => f.FlightNumber == flightNumber) ??
-                   throw new FlightNotFoundException();
         }
     }
 }

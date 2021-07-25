@@ -15,20 +15,19 @@ namespace GroveAirlines.RepositoryLayer
     {
         private readonly GroveAirlinesContext _context;
 
-        public AirportRepository(GroveAirlinesContext _context)
+        public AirportRepository(GroveAirlinesContext context)
         {
-            this._context = _context;
+            this._context = context;
         }
 
-        public async Task<Airport> GetAirportByID(int airportID)
+        public async Task<Airport> GetAirportById(int airportId)
         {
             // validate
-            if (!airportID.IsPositiveInteger())
-            {
-                Console.WriteLine($"Argument exception in GetAirportByID! airportID = {airportID}");    // retrieve airport
-                throw new ArgumentException("Invalid parameters provided; please check parameters.");   // custom exception
-            }
-            return await _context.Airport.FirstOrDefaultAsync(a => a.AirportId == airportID) ?? throw new AirportNotFoundException();
+            if (airportId.IsPositiveInteger())
+                return await _context.Airport.FirstOrDefaultAsync(a => a.AirportId == airportId) ??
+                       throw new AirportNotFoundException();
+            Console.WriteLine($"Argument exception in GetAirportByID! airportID = {airportId}");    // retrieve airport
+            throw new ArgumentException("Invalid parameters provided; please check parameters.");   // custom exception
             // wait for completion; retrieve first match; return first matching ID element; throw exception if false
         }
     }

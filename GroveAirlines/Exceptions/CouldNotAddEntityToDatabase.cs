@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FlyingDutchmanAirlines.Exceptions
+namespace GroveAirlines.Exceptions
 {
     public class CouldNotAddEntityToDatabaseException : Exception
     {
