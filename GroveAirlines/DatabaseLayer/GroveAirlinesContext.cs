@@ -19,11 +19,9 @@ namespace GroveAirlines.DatabaseLayer
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {                                                                                                           // set to empty string if null (false)
-                string connectionString = Environment.GetEnvironmentVariable("GroveAirlines_Database_Connection_String") ?? string.Empty;   // get connection string without hard-coding it 
-                optionsBuilder.UseSqlServer(connectionString);  // connects to MSSQL
-            }
+            if (optionsBuilder.IsConfigured) return; // set to empty string if null (false)
+            var connectionString = Environment.GetEnvironmentVariable("GroveAirlines_Database_Connection_String") ?? string.Empty;   // get connection string without hard-coding it 
+            optionsBuilder.UseSqlServer(connectionString);  // connects to MSSQL
         }
 
         // generates entities (and overrides)

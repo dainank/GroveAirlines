@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using GroveAirlines.DatabaseLayer;
@@ -14,30 +16,29 @@ namespace GroveAirlines.RepositoryLayer
     {
         private readonly GroveAirlinesContext _context;
 
-        public FlightRepository(GroveAirlinesContext _context)
+        public FlightRepository(GroveAirlinesContext context)
         {
-            this._context = _context;
+            this._context = context;
         }
 
-
-        public async Task<Flight> GetFlightByFlightNumber(int flightNumber, int originAirportId, int destinationAirportId)
+        [MethodImpl(MethodImplOptions.NoInlining)]  // parameter less constructor only for testing
+        public FlightRepository()
         {
-            if (!originAirportId.IsPositiveInteger() || !destinationAirportId.IsPositiveInteger())
+            if (Assembly.GetExecutingAssembly().FullName == Assembly.GetCallingAssembly().FullName)
             {
-                Console.WriteLine(
-                    $"Argument exception in GetFlightByFlightNumber! originAirportId = {originAirportId}, destinationAirportId = {destinationAirportId}");
-                throw new ArgumentException("Invalid parameters provided.");
+                throw new Exception("This constructor should only be used for testing");
             }
+        }
 
-            if (!flightNumber.IsPositiveInteger())
-            {
-                Console.WriteLine(
-                    $"Argument exception in GetFlightByFlightNumber! flightNumber = {flightNumber}");
-                throw new FlightNotFoundException();
-            }
+        public virtual async Task<Flight> GetFlightByFlightNumber(int flightNumber)
+        {
+            if (flightNumber.IsPositiveInteger())
+                return await _context.Flight.FirstOrDefaultAsync(f => f.FlightNumber == flightNumber) ??
+                       throw new FlightNotFoundException();
+            Console.WriteLine(
+                $"Argument exception in GetFlightByFlightNumber! flightNumber = {flightNumber}");
+            throw new FlightNotFoundException();
 
-            return await _context.Flight.FirstOrDefaultAsync(f => f.FlightNumber == flightNumber) ??
-                   throw new FlightNotFoundException();
         }
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace GroveAirlines
 {
-    class Startup
+    internal class Startup
     {
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)  // called by HostBuilder (enables usage of controllers/endpoints)
         {
