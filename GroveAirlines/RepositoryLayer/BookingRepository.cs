@@ -25,7 +25,7 @@ namespace GroveAirlines.RepositoryLayer
             this._context = _context;
         }
 
-        public async Task CreateBooking(int customerId, int flightNumber)
+        public virtual async Task CreateBooking(int customerId, int flightNumber)
         {   // validate
             if (!customerId.IsPositiveInteger() || !flightNumber.IsPositiveInteger()) // can't be negative
             {

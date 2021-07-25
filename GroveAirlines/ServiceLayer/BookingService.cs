@@ -15,6 +15,8 @@ namespace GroveAirlines.ServiceLayer
         private readonly BookingRepository _bookingRepository;
         private readonly CustomerRepository _customerRepository;
         private BookingRepository repository;
+        private FlightRepository object1;
+        private CustomerRepository object2;
 
         public BookingService(BookingRepository repository)
         {
@@ -27,8 +29,19 @@ namespace GroveAirlines.ServiceLayer
             _customerRepository = customerRepository;
         }
 
+        public BookingService(BookingRepository repository, FlightRepository object1, CustomerRepository object2) : this(repository)
+        {
+            this.object1 = object1;
+            this.object2 = object2;
+        }
+
         public async Task<(bool, Exception)> CreateBooking(string customerName, int flightNumber)
         {
+            if (string.IsNullOrEmpty(customerName) || !flightNumber.IsPositiveInteger())
+            {
+                return (false, new ArgumentException());
+            }
+
             try
             {
                 Customer customer;

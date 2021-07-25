@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +20,15 @@ namespace GroveAirlines.RepositoryLayer
         public CustomerRepository(GroveAirlinesContext _context)
         {
             this._context = _context;
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]  // parameterless constructor only for testing
+        public CustomerRepository()
+        {
+            if (Assembly.GetExecutingAssembly().FullName == Assembly.GetCallingAssembly().FullName)
+            {
+                throw new Exception("This constructor should only be used for testing");
+            }
         }
 
         public async Task<bool> CreateCustomer(string name) // async Task<>
@@ -44,7 +55,7 @@ namespace GroveAirlines.RepositoryLayer
             return true;
         }
 
-        public async Task<Customer> GetCustomerByName(string name)
+        public virtual async Task<Customer> GetCustomerByName(string name)
         {
             if (IsInvalidCustomerName(name))
             {

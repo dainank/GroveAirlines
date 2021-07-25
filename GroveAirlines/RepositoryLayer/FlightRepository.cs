@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using GroveAirlines.DatabaseLayer;
@@ -19,6 +21,14 @@ namespace GroveAirlines.RepositoryLayer
             this._context = _context;
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining)]  // parameterless constructor only for testing
+        public FlightRepository()
+        {
+            if (Assembly.GetExecutingAssembly().FullName == Assembly.GetCallingAssembly().FullName)
+            {
+                throw new Exception("This constructor should only be used for testing");
+            }
+        }
 
         public async Task<Flight> GetFlightByFlightNumber(int flightNumber, int originAirportId, int destinationAirportId)
         {
