@@ -30,15 +30,8 @@ namespace GroveAirlines.RepositoryLayer
             }
         }
 
-        public async Task<Flight> GetFlightByFlightNumber(int flightNumber, int originAirportId, int destinationAirportId)
+        public virtual async Task<Flight> GetFlightByFlightNumber(int flightNumber)
         {
-            if (!originAirportId.IsPositiveInteger() || !destinationAirportId.IsPositiveInteger())
-            {
-                Console.WriteLine(
-                    $"Argument exception in GetFlightByFlightNumber! originAirportId = {originAirportId}, destinationAirportId = {destinationAirportId}");
-                throw new ArgumentException("Invalid parameters provided.");
-            }
-
             if (flightNumber.IsPositiveInteger())
                 return await _context.Flight.FirstOrDefaultAsync(f => f.FlightNumber == flightNumber) ??
                        throw new FlightNotFoundException();

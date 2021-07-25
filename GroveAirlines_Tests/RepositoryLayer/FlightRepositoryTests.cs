@@ -43,7 +43,7 @@ namespace GroveAirlines_Tests.RepositoryLayer
         [TestMethod]
         public async Task GetFlightByFlightNumber_Success()
         {
-            Flight flight = await _repository.GetFlightByFlightNumber(1, 1, 2);
+            Flight flight = await _repository.GetFlightByFlightNumber(1);
             Assert.IsNotNull(flight);
 
             Flight dbFlight = _context.Flight.First(f => f.FlightNumber == 1);
@@ -56,17 +56,17 @@ namespace GroveAirlines_Tests.RepositoryLayer
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(FlightNotFoundException))]
         public async Task GetFlightByFlightNumber_Failure_InvalidOriginAirportId()
         {
-            await _repository.GetFlightByFlightNumber(0, -1, 0);
+            await _repository.GetFlightByFlightNumber(0);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(FlightNotFoundException))]
         public async Task GetFlightByFlightNumber_Failure_InvalidDestinationAirport()
         {
-            await _repository.GetFlightByFlightNumber(0, 0, -1);
+            await _repository.GetFlightByFlightNumber(0);
         }
 
         [TestMethod]
@@ -74,14 +74,14 @@ namespace GroveAirlines_Tests.RepositoryLayer
         [ExpectedException(typeof(FlightNotFoundException))]
         public async Task GetFlightByFlightNumber_Failure_InvalidFlightNumber(int flightNumber)
         {
-            await _repository.GetFlightByFlightNumber(flightNumber, 0, 0);
+            await _repository.GetFlightByFlightNumber(flightNumber);
         }
 
         [TestMethod]
         [ExpectedException(typeof(FlightNotFoundException))]
         public async Task GetFlightByFlightNumber_Failure_DatabaseException()
         {
-            await _repository.GetFlightByFlightNumber(2, 1, 2);
+            await _repository.GetFlightByFlightNumber(2);
         }
     }
 }

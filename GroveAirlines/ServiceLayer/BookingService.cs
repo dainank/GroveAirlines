@@ -4,6 +4,7 @@ using GroveAirlines.RepositoryLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -43,24 +44,55 @@ namespace GroveAirlines.ServiceLayer
 
             try
             {
-                Customer customer;
-                try
+                Customer customer = await GetCustomerFromDatabase(customerName) ?? await AddCustomerToDatabase(customerName);
+
+                if (!await FlightExistsInDatabase(flightNumber))
                 {
-                    customer = await _customerRepository.GetCustomerByName(customerName);   // pickup customer
-                }
-                catch (CustomerNotFoundException)   // if customer not found (or other exception)
-                {
-                    await _customerRepository.CreateCustomer(customerName); // create a new customer since he/she is a new customer
-                    return await CreateBooking(customerName, flightNumber); // restart booking method with customer now existing
+                    return (false, new CouldNotAddBookingToDatabaseException());
                 }
 
-                await _bookingRepository.CreateBooking(customer.CustomerId, flightNumber);  // now create booking with picked up user
-                return (true, null);    // exit method cleanly
+                await _bookingRepository.CreateBooking(customer.CustomerId, flightNumber);
+                return (true, null);
             }
             catch (Exception exception)
             {
-                return (false, exception);  // exit method with error
+                return (false, exception);
             }
+        }
+
+        private async Task<bool> FlightExistsInDatabase(int flightNumber)
+        {
+            try
+            {
+                return await _flightRepository.GetFlightByFlightNumber(flightNumber) != null;
+            }
+            catch (FlightNotFoundException)
+            {
+                return false;
+            }
+        }
+
+        private async Task<Customer> GetCustomerFromDatabase(string name)
+        {
+            try
+            {
+                return await _customerRepository.GetCustomerByName(name);
+            }
+            catch (CustomerNotFoundException)
+            {
+                return null;
+            }
+            catch (Exception exception)
+            {
+                ExceptionDispatchInfo.Capture(exception.InnerException ?? new Exception()).Throw();
+                return null;
+            }
+        }
+
+        private async Task<Customer> AddCustomerToDatabase(string name)
+        {
+            await _customerRepository.CreateCustomer(name);
+            return await _customerRepository.GetCustomerByName(name);
         }
     }
 }
