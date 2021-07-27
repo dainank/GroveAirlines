@@ -75,19 +75,19 @@ namespace GroveAirlines_Tests.ServiceLayer
             _mockCustomerRepository.Setup(repository => repository.GetCustomerByName("Benjamin Whelan")).Returns(Task.FromResult(new Customer("Benjamin Whelan") { CustomerId = 0 }));
             _mockCustomerRepository.Setup(repository => repository.GetCustomerByName("Scott Whelan")).Returns(Task.FromResult(new Customer("Scott Whelan"){CustomerId = 1}));
 
-            var service = new BookingService(_mockBookingRepository.Object, _mockCustomerRepository.Object);
+            var service = new BookingService(_mockBookingRepository.Object, _mockFlightRepository.Object, _mockCustomerRepository.Object);
 
             var (result, exception) = await service.CreateBooking("Benjamin Whelan", 1); // call false
 
             Assert.IsFalse(result);
             Assert.IsNotNull(exception);
-            Assert.IsInstanceOfType(exception, typeof(NullReferenceException));  // assert exception
+            Assert.IsInstanceOfType(exception, typeof(CouldNotAddBookingToDatabaseException));  // assert exception
 
             (result, exception) = await service.CreateBooking("Scott Whelan", 2);   // call false
 
             Assert.IsFalse(result);
             Assert.IsNotNull(exception);
-            Assert.IsInstanceOfType(exception, typeof(NullReferenceException));  // assert exception
+            Assert.IsInstanceOfType(exception, typeof(CouldNotAddBookingToDatabaseException));  // assert exception
         }
 
         [TestMethod]

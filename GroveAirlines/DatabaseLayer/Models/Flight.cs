@@ -2,7 +2,7 @@
 
 namespace GroveAirlines.DatabaseLayer.Models
 {
-    public sealed partial class Flight
+    public sealed class Flight
     {
         public int FlightNumber { get; set; }
         public int Origin { get; set; }
