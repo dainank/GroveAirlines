@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using GroveAirlines.DatabaseLayer;
+using GroveAirlines.RepositoryLayer;
+using GroveAirlines.ServiceLayer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,7 +18,22 @@ namespace GroveAirlines
 
         public void ConfigureServices(IServiceCollection services)  // registering startup with host
         {
+            //controllers
             services.AddControllers();
+
+            //services
+            services.AddTransient(typeof(FlightService), typeof(FlightService));
+            services.AddTransient(typeof(BookingService), typeof(BookingService));
+
+            //repositories
+            services.AddTransient(typeof(FlightRepository), typeof(FlightRepository));
+            services.AddTransient(typeof(AirportRepository), typeof(AirportRepository));
+            services.AddTransient(typeof(BookingRepository), typeof(BookingRepository));
+            services.AddTransient(typeof(CustomerRepository), typeof(CustomerRepository));
+
+            // database
+            services.AddDbContext<GroveAirlinesContext>(ServiceLifetime.Transient);
+            services.AddTransient(typeof(GroveAirlinesContext), typeof(GroveAirlinesContext));
         }
     }
 }
