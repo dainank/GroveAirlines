@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using GroveAirlines.Exceptions;
 using GroveAirlines.ServiceLayer;
 using GroveAirlines.Views;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GroveAirlines.ControllerLayer
@@ -22,6 +23,9 @@ namespace GroveAirlines.ControllerLayer
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllFlights()
         {
             try
@@ -45,10 +49,17 @@ namespace GroveAirlines.ControllerLayer
         }
 
         [HttpGet("{flightNumber}")]    // GET /flight/{flightNumber}
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetFlightByFlightNumber(int flightNumber)
         {
             try
             {
+                if (!flightNumber.IsPositiveInteger())
+                {
+                    throw new Exception();
+                }
                 FlightView flight = await _flightService.GetFlightByFlightNumber(flightNumber);
                 return StatusCode((int) HttpStatusCode.OK, flight);
             }
