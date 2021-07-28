@@ -41,5 +41,16 @@ namespace GroveAirlines.RepositoryLayer
             throw new ArgumentException("Invalid parameters provided; please check parameters.");   // custom exception
             // wait for completion; retrieve first match; return first matching ID element; throw exception if false
         }
+
+        public virtual Queue<Airport> GetAllAirports()
+        {
+            Queue<Airport> airports = new Queue<Airport>(_context.Airport.Count());
+            foreach (Airport airport in _context.Airport)
+            {
+                airports.Enqueue(airport);
+            }
+
+            return airports;
+        }
     }
 }

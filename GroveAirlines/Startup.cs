@@ -24,6 +24,7 @@ namespace GroveAirlines
             //services
             services.AddTransient(typeof(FlightService), typeof(FlightService));
             services.AddTransient(typeof(BookingService), typeof(BookingService));
+            services.AddTransient(typeof(AirportService), typeof(AirportService));
 
             //repositories
             services.AddTransient(typeof(FlightRepository), typeof(FlightRepository));
